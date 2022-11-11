@@ -1,0 +1,23 @@
+version: '3.9'
+# Change all "client" to anything else
+services:
+  client:
+    image: nginx:latest
+    volumes:
+      - ./src:/usr/share/nginx/html
+    labels:
+      - "traefik.http.routers.client.rule=Host(`domain.ru`)"
+      - "traefik.port=80"
+      - "traefik.docker.network=web"
+      - "traefik.http.routers.client.entrypoints=websecure"
+      - "traefik.http.routers.client.tls.certresolver=myresolver"
+    container_name: client
+    networks:
+      - web
+      - internal
+
+networks:
+  web:
+    external: true
+  internal:
+    external: false
